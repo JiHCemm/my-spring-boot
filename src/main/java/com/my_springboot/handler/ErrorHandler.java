@@ -28,7 +28,7 @@ public class ErrorHandler {
      */
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public ResponseEntity<Result> NotValidExceptionHandler(MethodArgumentNotValidException e) {
-        log.debug("异常详情 ", e);
+        log.error("异常详情: ", e);
         BindingResult bindingResult = e.getBindingResult();
         if (bindingResult.hasErrors() == false) {
             return null;
@@ -37,7 +37,7 @@ public class ErrorHandler {
         for (FieldError error : bindingResult.getFieldErrors()) {
             fieldErrors.put(error.getField(), error.getCode() + "|" + error.getDefaultMessage());
         }
-        return new ResponseEntity<>(Result.error(422, "输入错误", fieldErrors),
+        return new ResponseEntity<>(Result.error(422, "不可处理实体", fieldErrors),
                 HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
@@ -46,8 +46,8 @@ public class ErrorHandler {
      */
     @ExceptionHandler(value = NoHandlerFoundException.class)
     public ResponseEntity<Result> NoHandlerFoundExceptionHandler(Exception e) {
-        log.debug("异常详情:", e);
-        return new ResponseEntity<>(Result.error(404, "页面丢失了!"), HttpStatus.NOT_FOUND);
+        log.error("异常详情: ", e);
+        return new ResponseEntity<>(Result.error(404, "未找到"), HttpStatus.NOT_FOUND);
     }
 
     /**
@@ -55,8 +55,8 @@ public class ErrorHandler {
      */
     @ExceptionHandler(value = Throwable.class)
     public ResponseEntity<Result> defaultHandler(Exception e) {
-        log.debug("异常详情:", e);
-        return new ResponseEntity<>(Result.error(500, "服务器错误:" + e),
+        log.error ("异常详情: ", e);
+        return new ResponseEntity<>(Result.error(500, "内部服务器错误:" + e),
                 HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

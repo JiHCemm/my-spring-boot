@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.my_springboot.rbac.dao.AdminDAO">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.my_springboot.rbac.pojo.Admin">
+        <id column="id" property="id"/>
+        <result column="user_name" property="userName"/>
+        <result column="create_time" property="createTime"/>
+        <result column="creator" property="creator"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="updater" property="updater"/>
+        <result column="is_delete" property="isDelete"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, user_name, password, create_time, creator, update_time, updater, is_delete
+    </sql>
+
+    <select id="listByCondition" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        rbac_admin
+        WHERE is_delete = 1
+        <if test="admin!=null">
+            <!-- id -->
+            <if test="admin.id!=null and admin.id!=''">
+                AND id=#{admin.id}
+            </if>
+            <!-- user_name -->
+            <if test="admin.userName!=null and admin.userName!=''">
+                AND user_name=#{admin.userName}
+            </if>
+            <!-- password -->
+            <if test="admin.password!=null and admin.password!=''">
+                AND password=#{admin.password}
+            </if>
+        </if>
+    </select>
+</mapper>

@@ -1,8 +1,9 @@
 package com.my_springboot.util;
 
 import java.io.Serializable;
+
+import com.my_springboot.constant.ResultEnum;
 import lombok.Data;
-import org.springframework.http.HttpStatus;
 
 @Data
 public class Result implements Serializable {
@@ -24,8 +25,8 @@ public class Result implements Serializable {
     //自定义data
     private Result(Object data) {
         this.data = data;
-        this.code = HttpStatus.OK.value();
-        this.msg = HttpStatus.OK.getReasonPhrase();
+        this.code = ResultEnum.OK.getCode ();
+        this.msg = ResultEnum.OK.getMsg ();
     }
 
     //自定义code,msg
@@ -35,8 +36,8 @@ public class Result implements Serializable {
     }
 
     private Result() {
-        this.code = HttpStatus.OK.value();
-        this.msg = HttpStatus.OK.getReasonPhrase();
+        this.code = ResultEnum.OK.getCode ();
+        this.msg = ResultEnum.OK.getMsg ();
     }
 
     public static Result success(Integer code, String msg, Object data) {
@@ -62,5 +63,6 @@ public class Result implements Serializable {
     public static Result success() {
         return new Result();
     }
+
 
 }

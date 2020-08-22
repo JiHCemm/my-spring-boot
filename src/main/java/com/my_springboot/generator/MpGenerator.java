@@ -16,9 +16,9 @@ import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 public class MpGenerator {
 
     public static void main(String[] args) {
-        String tableNames = "sys_user_info";// 通过表名生成相关类,多个用英文逗号隔开
-        String tablePrefix = "sys_";// 去掉表名前缀
-        String packageName = "com.my_springboot.user";// 自定义自己的包名，后续的代码生成会在这个包下
+        String tableNames = "rbac_admin,rbac_admin_role,rbac_role,rbac_role_permission,rbac_permission";// 通过表名生成相关类,多个用英文逗号隔开
+        String tablePrefix = "rbac_";// 去掉表名前缀
+        String packageName = "com.my_springboot.rbac";// 自定义自己的包名，后续的代码生成会在这个包下
         String projectPath = "C:\\Users\\shanhemei\\Desktop\\MP";// 生成文件的输出目录 我一般放在桌面,避免原文件被覆盖
         new AutoGenerator()
                 .setGlobalConfig(getGlobalConfig(projectPath))  //全局配置
@@ -46,7 +46,7 @@ public class MpGenerator {
                 .setBaseResultMap(true)// 开启 BaseResultMap 默认false
                 .setIdType(IdType.ASSIGN_UUID)// 主键策略 ASSIGN_UUID:主键生成32位字符串ID
                 .setDateType(DateType.ONLY_DATE)// 设置时间类型使用哪个包下的
-                .setEntityName("%sDO")// entity 命名方式 默认值：null 例如：%sEntity 生成 UserEntity
+//                .setEntityName("%s")// entity 命名方式 默认值：null 例如：%sEntity 生成 UserEntity
                 .setMapperName("%sDAO")// dao 命名方式 默认值：null 例如：%sDao 生成 UserDao
                 /*.setXmlName("%sMapper")// Mapper xml 命名方式   默认值：null 例如：%sDao 生成 UserDao.xml
                 .setServiceName("%sService")// service 命名方式   默认值：null 例如：%sBusiness 生成 UserBusiness
