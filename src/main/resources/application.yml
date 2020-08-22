@@ -1,0 +1,43 @@
+server:
+  #端口号
+  port: 8080
+
+spring:
+  #数据库连接配置
+  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost/my_springboot?characterEncoding=utf-8&useSSL=false&serverTimezone=UTC
+    username: root
+    password: root
+
+#mybatis的相关配置
+mybatis:
+  #mapper配置文件
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.my_springboot.*.pojo
+  #开启驼峰命名
+  configuration:
+    map-underscore-to-camel-case: true
+
+#mybatis-plus官方提供的yml配置：
+mybatis-plus:
+  global-config:
+    db-config:
+      id-type: auto
+      field-strategy: not_empty
+      #驼峰下划线转换
+      column-underline: true
+      #逻辑删除配置
+      logic-delete-value: 0
+      logic-not-delete-value: 1
+      db-type: mysql
+    refresh: false
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+
+#控制台看到执行的SQL语句
+logging:
+  level:
+    com:
+      mapper: debug
