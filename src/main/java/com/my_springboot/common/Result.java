@@ -1,4 +1,4 @@
-package com.my_springboot.util;
+package com.my_springboot.common;
 
 import java.io.Serializable;
 
@@ -22,17 +22,17 @@ public class Result implements Serializable {
         this.msg = msg;
     }
 
+    //自定义code,msg
+    private Result(Integer code, String msg) {
+        this.code = code;
+        this.msg = msg;
+    }
+
     //自定义data
     private Result(Object data) {
         this.data = data;
         this.code = ResultEnum.OK.getCode ();
         this.msg = ResultEnum.OK.getMsg ();
-    }
-
-    //自定义code,msg
-    private Result(Integer code, String msg) {
-        this.code = code;
-        this.msg = msg;
     }
 
     private Result() {
@@ -41,27 +41,27 @@ public class Result implements Serializable {
     }
 
     public static Result success(Integer code, String msg, Object data) {
-        return new Result(code, msg, data);
+        return new Result (code, msg, data);
     }
 
     public static Result success(Integer code, String msg) {
-        return new Result(code, msg);
-    }
-
-    public static Result error(Integer code, String msg) {
-        return new Result(code, msg);
-    }
-
-    public static Result error(Integer code, String msg, Object data) {
-        return new Result(code, msg, data);
+        return new Result (code, msg);
     }
 
     public static Result success(Object data) {
-        return new Result(data);
+        return new Result (data);
+    }
+
+    public static Result error(Integer code, String msg) {
+        return new Result (code, msg);
+    }
+
+    public static Result error(Integer code, String msg, Object data) {
+        return new Result (code, msg, data);
     }
 
     public static Result success() {
-        return new Result();
+        return new Result ();
     }
 
 

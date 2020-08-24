@@ -4,18 +4,32 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.my_springboot.rbac.pojo.Role">
-        <id column="id" property="id" />
-        <result column="role_name" property="roleName" />
-        <result column="create_time" property="createTime" />
-        <result column="creator" property="creator" />
-        <result column="update_time" property="updateTime" />
-        <result column="updater" property="updater" />
-        <result column="is_delete" property="isDelete" />
+        <id column="id" property="id"/>
+        <result column="role_name" property="roleName"/>
+        <result column="create_time" property="createTime"/>
+        <result column="creator" property="creator"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="updater" property="updater"/>
+        <result column="is_delete" property="isDelete"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id, role_name, create_time, creator, update_time, updater, is_delete
     </sql>
+
+    <select id="listByCondition" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        rbac_role
+        WHERE is_delete = 0
+        <if test="role!=null">
+            <!-- role_name -->
+            <if test="role.roleName!=null and role.roleName!=''">
+                AND role_name like CONCAT('%',#{role.roleName},'%')
+            </if>
+        </if>
+    </select>
 
 </mapper>

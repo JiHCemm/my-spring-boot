@@ -15,7 +15,21 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, permission_value, create_time, creator, update_time, updater, is_delete
+        id, permission_name, permission_value, create_time, creator, update_time, updater, is_delete
     </sql>
+
+    <select id="listByCondition" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        rbac_permission
+        WHERE is_delete = 0
+        <if test="permission!=null">
+            <!-- permission_value -->
+            <if test="permission.permissionValue!=null and permission.permissionValue!=''">
+                AND role_name = #{permission.permissionValue}
+            </if>
+        </if>
+    </select>
 
 </mapper>

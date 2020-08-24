@@ -4,7 +4,7 @@ package com.my_springboot.user.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.my_springboot.user.pojo.UserInfoDO;
 import com.my_springboot.user.service.IUserInfoService;
-import com.my_springboot.util.Result;
+import com.my_springboot.common.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;

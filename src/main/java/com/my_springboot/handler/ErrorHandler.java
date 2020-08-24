@@ -1,6 +1,6 @@
 package com.my_springboot.handler;
 
-import com.my_springboot.util.Result;
+import com.my_springboot.common.Result;
 import java.util.HashMap;
 import java.util.Map;
 import org.slf4j.LoggerFactory;

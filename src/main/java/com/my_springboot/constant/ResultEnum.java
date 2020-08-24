@@ -6,11 +6,10 @@ package com.my_springboot.constant;
  */
 public enum ResultEnum {
 
-    OK (200, "成功"),
-    BAD_REQUEST (400, "错误请求"),
-    NULL_PARAM (400, "参数空指针"),
-    DATA_DELETE (400, "数据被删除"),
-    NOT_FOUND (404, "未找到");
+    OK (200, "OK"),
+    NULL_PARAM (400, "Required parameter is not present"),
+    DATA_DELETE (400, "The data has been deleted"),
+    NOT_FOUND (404, "The data was not found");
 
     private final int code;
     private final String msg;

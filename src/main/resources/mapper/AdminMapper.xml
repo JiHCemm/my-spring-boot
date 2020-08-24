@@ -23,19 +23,15 @@
         <include refid="Base_Column_List"/>
         FROM
         rbac_admin
-        WHERE is_delete = 1
+        WHERE is_delete = 0
         <if test="admin!=null">
-            <!-- id -->
-            <if test="admin.id!=null and admin.id!=''">
-                AND id=#{admin.id}
-            </if>
             <!-- user_name -->
             <if test="admin.userName!=null and admin.userName!=''">
-                AND user_name=#{admin.userName}
+                AND user_name like CONCAT('%',#{admin.userName},'%')
             </if>
             <!-- password -->
             <if test="admin.password!=null and admin.password!=''">
-                AND password=#{admin.password}
+                AND password = #{admin.password}
             </if>
         </if>
     </select>

@@ -1,5 +1,6 @@
 package com.my_springboot.rbac.service;
 
+import com.my_springboot.common.Result;
 import com.my_springboot.rbac.pojo.Permission;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -12,5 +13,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2020-08-22
  */
 public interface IPermissionService extends IService<Permission> {
+
+    Result listByCondition(Integer pageNum, Integer pageSize, Permission permission);
 
 }

@@ -32,7 +32,10 @@ public class Permission implements Serializable {
     @TableId(value = "id", type = IdType.ASSIGN_UUID)
     private String id;
 
-    @ApiModelProperty(value = "权限标识")
+    @ApiModelProperty(value = "权限名称")
+    private String permissionName;
+
+    @ApiModelProperty(value = "权限值")
     private String permissionValue;
 
     @ApiModelProperty(value = "创建时间")
