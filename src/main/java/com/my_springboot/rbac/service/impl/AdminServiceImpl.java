@@ -7,13 +7,12 @@ import com.my_springboot.rbac.pojo.Admin;
 import com.my_springboot.rbac.dao.AdminDAO;
 import com.my_springboot.rbac.service.IAdminService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.my_springboot.util.MD5Util;
+import com.my_springboot.util.MD5Utils;
 import com.my_springboot.common.Result;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 /**
@@ -41,7 +40,7 @@ public class AdminServiceImpl extends ServiceImpl<AdminDAO, Admin> implements IA
         }
         Admin admin = new Admin ();
         admin.setUserName (userName);
-        admin.setPassword (MD5Util.MD5 (password));
+        admin.setPassword (MD5Utils.MD5 (password));
         List<Admin> admins = baseMapper.listByCondition (null, admin);
         if (null == admins || admins.size () == 0) {
             return Result.error (ResultEnum.NOT_FOUND.getCode (), ResultEnum.NOT_FOUND.getMsg ());
@@ -55,7 +54,7 @@ public class AdminServiceImpl extends ServiceImpl<AdminDAO, Admin> implements IA
         if (null != admin) {
             String password = admin.getPassword ();
             if (null != password && !"".equals (password)) {
-                admin.setPassword (MD5Util.MD5 (password));
+                admin.setPassword (MD5Utils.MD5 (password));
             }
         }
         if (null == pageNum || null == pageSize) {// 列表

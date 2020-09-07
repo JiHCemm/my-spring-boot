@@ -8,7 +8,7 @@ import java.security.MessageDigest;
  * @author JiHC
  * @since 2020/8/1
  */
-public class MD5Util {
+public class MD5Utils {
 
   private final static char[] hexArray = "0123456789ABCDEF".toCharArray();
 

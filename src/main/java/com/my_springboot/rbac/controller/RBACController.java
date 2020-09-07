@@ -10,8 +10,8 @@ import com.my_springboot.rbac.pojo.Role;
 import com.my_springboot.rbac.service.IAdminService;
 import com.my_springboot.rbac.service.IPermissionService;
 import com.my_springboot.rbac.service.IRoleService;
-import com.my_springboot.util.DateUtil;
-import com.my_springboot.util.MD5Util;
+import com.my_springboot.util.DateUtils;
+import com.my_springboot.util.MD5Utils;
 import com.my_springboot.common.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -56,9 +56,9 @@ public class RBACController {
             return Result.error (ResultEnum.NULL_PARAM.getCode (),
                     "Required String parameter 'password' is not present");
         }
-        admin.setPassword (MD5Util.MD5 (password));
+        admin.setPassword (MD5Utils.MD5 (password));
         admin.setCreator (TokenUtil.getTokenUserId ());
-        admin.setCreateTime (DateUtil.getCurrentTime ());
+        admin.setCreateTime (DateUtils.getCurrentTime ());
         return Result.success (adminService.save (admin));
     }
 
@@ -82,7 +82,7 @@ public class RBACController {
             return Result.error (ResultEnum.DATA_DELETE.getCode (), ResultEnum.DATA_DELETE.getMsg ());
         }
         admin.setUpdater (TokenUtil.getTokenUserId ());// 修改人
-        admin.setUpdateTime (DateUtil.getCurrentTime ());// 修改时间
+        admin.setUpdateTime (DateUtils.getCurrentTime ());// 修改时间
         return Result.success (adminService.updateById (admin));
     }
 
@@ -136,7 +136,7 @@ public class RBACController {
                     "Required String parameter 'roleName' is not present");
         }
         role.setCreator (TokenUtil.getTokenUserId ());
-        role.setCreateTime (DateUtil.getCurrentTime ());
+        role.setCreateTime (DateUtils.getCurrentTime ());
         roleService.save (role);
         return Result.success ();
     }
@@ -161,7 +161,7 @@ public class RBACController {
             return Result.error (ResultEnum.DATA_DELETE.getCode (), ResultEnum.DATA_DELETE.getMsg ());
         }
         role.setUpdater (TokenUtil.getTokenUserId ());// 修改人
-        role.setUpdateTime (DateUtil.getCurrentTime ());// 修改时间
+        role.setUpdateTime (DateUtils.getCurrentTime ());// 修改时间
         return Result.success (roleService.updateById (role));
     }
 
@@ -204,7 +204,7 @@ public class RBACController {
                     "Required String parameter 'permissionName' is not present");
         }
         permission.setCreator (TokenUtil.getTokenUserId ());
-        permission.setCreateTime (DateUtil.getCurrentTime ());
+        permission.setCreateTime (DateUtils.getCurrentTime ());
         permissionService.save (permission);
         return Result.success ();
     }
@@ -229,7 +229,7 @@ public class RBACController {
             return Result.error (ResultEnum.DATA_DELETE.getCode (), ResultEnum.DATA_DELETE.getMsg ());
         }
         permission.setUpdater (TokenUtil.getTokenUserId ());// 修改人
-        permission.setUpdateTime (DateUtil.getCurrentTime ());// 修改时间
+        permission.setUpdateTime (DateUtils.getCurrentTime ());// 修改时间
         return Result.success (permissionService.updateById (permission));
     }
 
