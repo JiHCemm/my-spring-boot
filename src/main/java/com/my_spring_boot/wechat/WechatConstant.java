@@ -7,13 +7,13 @@ package com.my_spring_boot.wechat;
 public class WechatConstant {
 
   //微信小程序appid
-  public final static String APP_ID = "wx24e555c077e702f3";
+  public final static String APP_ID = "appid";
   //微信小程序appsecret
-  public final static String APP_SECRET = "f549e353a9cf3ce16256756b8a8e229e";
+  public final static String APP_SECRET = "appsecret";
   //微信商户号
-  public final static String MCH_ID="1582954481";
+  public final static String MCH_ID="商户号";
   //微信支付的商户密钥
-  public final static  String API_KEY = "washimayun1302525820515014354439";
+  public final static  String API_KEY = "商户密钥";
   //签名方式
   public static final String SIGN_TYPE = "MD5";
   //支付成功后的服务器回调url
