@@ -14,7 +14,7 @@ import com.my_spring_boot.common.Result;
  */
 public interface IAdminService extends IService<Admin> {
 
-    Result login(String userName, String password);
+    Result login(String loginType, String loginName, String password);
 
     Result listByCondition(Integer pageNum, Integer pageSize, Admin admin);
 }

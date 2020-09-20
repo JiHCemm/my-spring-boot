@@ -9,6 +9,7 @@ public enum ResultEnum {
     OK (200, "OK"),
     NULL_PARAM (400, "Required parameter is not present"),
     DATA_DELETE (400, "The data has been deleted"),
+    NO_PERMISSION(403,"No permission"),
     NOT_FOUND (404, "The data was not found");
 
     private final int code;

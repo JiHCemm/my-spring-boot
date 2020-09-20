@@ -16,12 +16,12 @@ import java.util.Date;
 @Service
 public class TokenService {
 
-    public String getToken(Admin admin) {
-        Date start = new Date ();
-        long currentTime = System.currentTimeMillis () + 60 * 60 * 1000;//一小时有效时间
-        Date end = new Date (currentTime);
-        return JWT.create ().withAudience (admin.getId ()).withIssuedAt (start)
-                .withExpiresAt (end)
-                .sign (Algorithm.HMAC256 (admin.getPassword ()));
+    public String getToken(String id, String password) {
+        Date start = new Date();
+        long currentTime = System.currentTimeMillis() + 60 * 60 * 1000;//一小时有效时间
+        Date end = new Date(currentTime);
+        return JWT.create().withAudience(id).withIssuedAt(start)
+                .withExpiresAt(end)
+                .sign(Algorithm.HMAC256(password));
     }
 }

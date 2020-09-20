@@ -48,7 +48,7 @@ public class SwaggerConfig implements WebMvcConfigurer {
     }
 
     private ApiInfo apiInfo() {
-        //访问地址：http://localhost:8088/xin_mei_love/swagger-ui.html#!
+        //访问地址：http://localhost:8080/swagger-ui.html#!
         return new ApiInfoBuilder()
                 .title("my_springboot后端api接口文档")// 设置页面标题
                 .description("欢迎访问my_springboot接口文档，本文档描述了my_springboot后端相关接口的定义")// 描述

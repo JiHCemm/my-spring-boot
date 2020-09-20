@@ -52,6 +52,10 @@ public class Result implements Serializable {
         return new Result (data);
     }
 
+    public static Result error(ResultEnum re) {
+        return new Result (re.getCode(), re.getMsg());
+    }
+
     public static Result error(Integer code, String msg) {
         return new Result (code, msg);
     }

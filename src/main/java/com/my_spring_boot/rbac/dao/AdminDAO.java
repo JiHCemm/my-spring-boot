@@ -3,6 +3,7 @@ package com.my_spring_boot.rbac.dao;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.my_spring_boot.rbac.pojo.Admin;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

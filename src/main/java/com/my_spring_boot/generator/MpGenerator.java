@@ -16,10 +16,10 @@ import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 public class MpGenerator {
 
     public static void main(String[] args) {
-        String tableNames = "rbac_admin,rbac_admin_role,rbac_role,rbac_role_permission,rbac_permission";// 通过表名生成相关类,多个用英文逗号隔开
-        String tablePrefix = "rbac_";// 去掉表名前缀
-        String packageName = "com.my_springboot.rbac";// 自定义自己的包名，后续的代码生成会在这个包下
-        String projectPath = "C:\\Users\\shanhemei\\Desktop\\MP";// 生成文件的输出目录 我一般放在桌面,避免原文件被覆盖
+        String tableNames = "user_info";// 通过表名生成相关类,多个用英文逗号隔开
+        String tablePrefix = "";// 去掉表名前缀
+        String packageName = "com.my_spring_boot.user";// 自定义自己的包名，后续的代码生成会在这个包下
+        String projectPath = "C:\\Users\\Administrator\\Desktop\\MP";// 生成文件的输出目录 我一般放在桌面,避免原文件被覆盖
         new AutoGenerator()
                 .setGlobalConfig(getGlobalConfig(projectPath))  //全局配置
                 .setDataSource(getDataSource()) //数据源配置
@@ -62,7 +62,7 @@ public class MpGenerator {
     private static DataSourceConfig getDataSource() {
         DataSourceConfig dsc = new DataSourceConfig();
         dsc.setUrl(
-                "jdbc:mysql://localhost:3306/my_springboot?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC"
+                "jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC"
         );
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         dsc.setUsername("root");

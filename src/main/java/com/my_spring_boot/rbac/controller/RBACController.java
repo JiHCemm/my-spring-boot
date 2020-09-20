@@ -3,6 +3,7 @@ package com.my_spring_boot.rbac.controller;
 
 import com.my_spring_boot.auth.TokenUtil;
 import com.my_spring_boot.auth.UserLoginToken;
+import com.my_spring_boot.constant.DatabaseEnum;
 import com.my_spring_boot.constant.ResultEnum;
 import com.my_spring_boot.rbac.pojo.Admin;
 import com.my_spring_boot.rbac.pojo.Permission;
@@ -33,33 +34,37 @@ import org.springframework.web.bind.annotation.*;
 @Api(value = "RBACController", tags = {"【权限模块】"})
 public class RBACController {
 
-    @Autowired
     private IAdminService adminService;
-    @Autowired
     private IRoleService roleService;
-    @Autowired
     private IPermissionService permissionService;
+
+    @Autowired
+    private RBACController(IAdminService as, IRoleService rs, IPermissionService ps) {
+        this.adminService = as;
+        this.roleService = rs;
+        this.permissionService = ps;
+    }
 
     @ApiOperation("添加管理员")
     @PostMapping(value = "/user/saveAdmin")
     @UserLoginToken
     public Result saveAdmin(@RequestBody Admin admin) {
         if (null == admin) {
-            return Result.error (ResultEnum.NULL_PARAM.getCode (), ResultEnum.NULL_PARAM.getMsg ());
+            return Result.error(ResultEnum.NULL_PARAM.getCode(), ResultEnum.NULL_PARAM.getMsg());
         }
-        if (null == admin.getUserName () || "".equals (admin.getUserName ())) {
-            return Result.error (ResultEnum.NULL_PARAM.getCode (),
+        if (null == admin.getUserName() || "".equals(admin.getUserName())) {
+            return Result.error(ResultEnum.NULL_PARAM.getCode(),
                     "Required String parameter 'userName' is not present");
         }
-        String password = admin.getPassword ();
-        if (null == password || "".equals (password)) {
-            return Result.error (ResultEnum.NULL_PARAM.getCode (),
+        String password = admin.getPassword();
+        if (null == password || "".equals(password)) {
+            return Result.error(ResultEnum.NULL_PARAM.getCode(),
                     "Required String parameter 'password' is not present");
         }
-        admin.setPassword (MD5Utils.MD5 (password));
-        admin.setCreator (TokenUtil.getTokenUserId ());
-        admin.setCreateTime (DateUtils.getCurrentTime ());
-        return Result.success (adminService.save (admin));
+        admin.setPassword(MD5Utils.MD5(password));
+        admin.setCreator(TokenUtil.getTokenUserId());
+        admin.setCreateTime(DateUtils.getCurrentTime());
+        return Result.success(adminService.save(admin));
     }
 
     @ApiOperation("修改管理员")
@@ -67,23 +72,23 @@ public class RBACController {
     @UserLoginToken
     public Result updateAdmin(@RequestBody Admin admin) {
         if (null == admin) {// 参数空指针
-            return Result.error (ResultEnum.NULL_PARAM.getCode (), ResultEnum.NULL_PARAM.getMsg ());
+            return Result.error(ResultEnum.NULL_PARAM.getCode(), ResultEnum.NULL_PARAM.getMsg());
         }
-        String id = admin.getId ();
-        if (null == id || "".equals (id)) {
-            return Result.error (ResultEnum.NULL_PARAM.getCode (),
+        String id = admin.getId();
+        if (null == id || "".equals(id)) {
+            return Result.error(ResultEnum.NULL_PARAM.getCode(),
                     "Required String parameter 'id' is not present");
         }
-        Admin originalData = adminService.getById (id);
+        Admin originalData = adminService.getById(id);
         if (null == originalData) {// 未找到
-            return Result.error (ResultEnum.NOT_FOUND.getCode (), ResultEnum.NOT_FOUND.getMsg ());
+            return Result.error(ResultEnum.NOT_FOUND.getCode(), ResultEnum.NOT_FOUND.getMsg());
         }
-        if (originalData.getIsDelete () == 1) {// 数据被删除
-            return Result.error (ResultEnum.DATA_DELETE.getCode (), ResultEnum.DATA_DELETE.getMsg ());
+        if (originalData.getIsDelete() == 1) {// 数据被删除
+            return Result.error(ResultEnum.DATA_DELETE.getCode(), ResultEnum.DATA_DELETE.getMsg());
         }
-        admin.setUpdater (TokenUtil.getTokenUserId ());// 修改人
-        admin.setUpdateTime (DateUtils.getCurrentTime ());// 修改时间
-        return Result.success (adminService.updateById (admin));
+        admin.setUpdater(TokenUtil.getTokenUserId());// 修改人
+        admin.setUpdateTime(DateUtils.getCurrentTime());// 修改时间
+        return Result.success(adminService.updateById(admin));
     }
 
     @ApiOperation("删除管理员")
@@ -91,15 +96,15 @@ public class RBACController {
     @ApiImplicitParam(name = "id", value = "管理员id", dataType = "string", required = true, paramType = "query")
     @UserLoginToken
     public Result removeAdmin(@RequestParam String id) {
-        Admin admin = adminService.getById (id);
+        Admin admin = adminService.getById(id);
         if (null == admin) {// 未找到
-            return Result.error (ResultEnum.NOT_FOUND.getCode (), ResultEnum.NOT_FOUND.getMsg ());
+            return Result.error(ResultEnum.NOT_FOUND.getCode(), ResultEnum.NOT_FOUND.getMsg());
         }
-        if (admin.getIsDelete () == 1) {// 数据已被删除
-            return Result.error (ResultEnum.DATA_DELETE.getCode (), ResultEnum.DATA_DELETE.getMsg ());
+        if (admin.getIsDelete() == 1) {// 数据已被删除
+            return Result.error(ResultEnum.DATA_DELETE.getCode(), ResultEnum.DATA_DELETE.getMsg());
         }
-        admin.setIsDelete (1);// 逻辑删除
-        return Result.success (adminService.updateById (admin));
+        admin.setIsDelete(1);// 逻辑删除
+        return Result.success(adminService.updateById(admin));
     }
 
     @ApiOperation("管理员登陆")
@@ -110,7 +115,7 @@ public class RBACController {
             @ApiImplicitParam(name = "password", value = "密码", dataType = "string", required = true, paramType = "query", defaultValue = "admin123")
     })
     public Result login(@RequestParam String userName, @RequestParam String password) {
-        return adminService.login (userName, password);
+        return adminService.login(DatabaseEnum.ADMIN.getValue(),userName, password);
     }
 
     @ApiOperation("条件查询管理员列表")
@@ -120,8 +125,9 @@ public class RBACController {
             @ApiImplicitParam(name = "pageNum", value = "当前页码", dataType = "int", paramType = "query", defaultValue = "1"),
             @ApiImplicitParam(name = "pageSize", value = "每页数量", dataType = "int", paramType = "query", defaultValue = "10")
     })
-    public Result listAdminsPage(@RequestParam Integer pageNum, @RequestParam Integer pageSize, @RequestBody Admin admin) {
-        return adminService.listByCondition (pageNum, pageSize, admin);
+    public Result listAdminsPage(@RequestParam Integer pageNum, @RequestParam Integer pageSize,
+            @RequestBody Admin admin) {
+        return adminService.listByCondition(pageNum, pageSize, admin);
     }
 
     @ApiOperation("添加角色")
@@ -129,16 +135,16 @@ public class RBACController {
     @UserLoginToken
     public Result saveRole(@RequestBody Role role) {
         if (null == role) {
-            return Result.error (ResultEnum.NULL_PARAM.getCode (), ResultEnum.NULL_PARAM.getMsg ());
+            return Result.error(ResultEnum.NULL_PARAM.getCode(), ResultEnum.NULL_PARAM.getMsg());
         }
-        if (null == role.getRoleName () || "".equals (role.getRoleName ())) {
-            return Result.error (ResultEnum.NULL_PARAM.getCode (),
+        if (null == role.getRoleName() || "".equals(role.getRoleName())) {
+            return Result.error(ResultEnum.NULL_PARAM.getCode(),
                     "Required String parameter 'roleName' is not present");
         }
-        role.setCreator (TokenUtil.getTokenUserId ());
-        role.setCreateTime (DateUtils.getCurrentTime ());
-        roleService.save (role);
-        return Result.success ();
+        role.setCreator(TokenUtil.getTokenUserId());
+        role.setCreateTime(DateUtils.getCurrentTime());
+        roleService.save(role);
+        return Result.success();
     }
 
     @ApiOperation("修改角色")
@@ -146,23 +152,23 @@ public class RBACController {
     @UserLoginToken
     public Result updateRole(@RequestBody Role role) {
         if (null == role) {// 参数空指针
-            return Result.error (ResultEnum.NULL_PARAM.getCode (), ResultEnum.NULL_PARAM.getMsg ());
+            return Result.error(ResultEnum.NULL_PARAM.getCode(), ResultEnum.NULL_PARAM.getMsg());
         }
-        String id = role.getId ();
-        if (null == id || "".equals (id)) {
-            return Result.error (ResultEnum.NULL_PARAM.getCode (),
+        String id = role.getId();
+        if (null == id || "".equals(id)) {
+            return Result.error(ResultEnum.NULL_PARAM.getCode(),
                     "Required String parameter 'id' is not present");
         }
-        Role originalData = roleService.getById (id);
+        Role originalData = roleService.getById(id);
         if (null == originalData) {// 未找到
-            return Result.error (ResultEnum.NOT_FOUND.getCode (), ResultEnum.NOT_FOUND.getMsg ());
+            return Result.error(ResultEnum.NOT_FOUND.getCode(), ResultEnum.NOT_FOUND.getMsg());
         }
-        if (originalData.getIsDelete () == 1) {// 数据被删除
-            return Result.error (ResultEnum.DATA_DELETE.getCode (), ResultEnum.DATA_DELETE.getMsg ());
+        if (originalData.getIsDelete() == 1) {// 数据被删除
+            return Result.error(ResultEnum.DATA_DELETE.getCode(), ResultEnum.DATA_DELETE.getMsg());
         }
-        role.setUpdater (TokenUtil.getTokenUserId ());// 修改人
-        role.setUpdateTime (DateUtils.getCurrentTime ());// 修改时间
-        return Result.success (roleService.updateById (role));
+        role.setUpdater(TokenUtil.getTokenUserId());// 修改人
+        role.setUpdateTime(DateUtils.getCurrentTime());// 修改时间
+        return Result.success(roleService.updateById(role));
     }
 
     @ApiOperation("删除角色")
@@ -170,15 +176,15 @@ public class RBACController {
     @ApiImplicitParam(name = "id", value = "角色id", dataType = "string", required = true, paramType = "query")
     @UserLoginToken
     public Result removeRole(@RequestParam String id) {
-        Role role = roleService.getById (id);
+        Role role = roleService.getById(id);
         if (null == role) {// 未找到
-            return Result.error (ResultEnum.NOT_FOUND.getCode (), ResultEnum.NOT_FOUND.getMsg ());
+            return Result.error(ResultEnum.NOT_FOUND.getCode(), ResultEnum.NOT_FOUND.getMsg());
         }
-        if (role.getIsDelete () == 1) {// 数据已被删除
-            return Result.error (ResultEnum.DATA_DELETE.getCode (), ResultEnum.DATA_DELETE.getMsg ());
+        if (role.getIsDelete() == 1) {// 数据已被删除
+            return Result.error(ResultEnum.DATA_DELETE.getCode(), ResultEnum.DATA_DELETE.getMsg());
         }
-        role.setIsDelete (1);// 逻辑删除
-        return Result.success (roleService.updateById (role));
+        role.setIsDelete(1);// 逻辑删除
+        return Result.success(roleService.updateById(role));
     }
 
     @ApiOperation("条件查询角色列表")
@@ -188,8 +194,9 @@ public class RBACController {
             @ApiImplicitParam(name = "pageNum", value = "当前页码", dataType = "int", paramType = "query", defaultValue = "1"),
             @ApiImplicitParam(name = "pageSize", value = "每页数量", dataType = "int", paramType = "query", defaultValue = "10")
     })
-    public Result listRolesPage(@RequestParam Integer pageNum, @RequestParam Integer pageSize, @RequestBody Role role) {
-        return roleService.listByCondition (pageNum, pageSize, role);
+    public Result listRolesPage(@RequestParam Integer pageNum, @RequestParam Integer pageSize,
+            @RequestBody Role role) {
+        return roleService.listByCondition(pageNum, pageSize, role);
     }
 
     @ApiOperation("添加权限")
@@ -197,16 +204,16 @@ public class RBACController {
     @UserLoginToken
     public Result savePermission(@RequestBody Permission permission) {
         if (null == permission) {
-            return Result.error (ResultEnum.NULL_PARAM.getCode (), ResultEnum.NULL_PARAM.getMsg ());
+            return Result.error(ResultEnum.NULL_PARAM.getCode(), ResultEnum.NULL_PARAM.getMsg());
         }
-        if (null == permission.getPermissionName () || "".equals (permission.getPermissionName ())) {
-            return Result.error (ResultEnum.NULL_PARAM.getCode (),
+        if (null == permission.getPermissionName() || "".equals(permission.getPermissionName())) {
+            return Result.error(ResultEnum.NULL_PARAM.getCode(),
                     "Required String parameter 'permissionName' is not present");
         }
-        permission.setCreator (TokenUtil.getTokenUserId ());
-        permission.setCreateTime (DateUtils.getCurrentTime ());
-        permissionService.save (permission);
-        return Result.success ();
+        permission.setCreator(TokenUtil.getTokenUserId());
+        permission.setCreateTime(DateUtils.getCurrentTime());
+        permissionService.save(permission);
+        return Result.success();
     }
 
     @ApiOperation("修改权限")
@@ -214,23 +221,23 @@ public class RBACController {
     @UserLoginToken
     public Result updatePermission(@RequestBody Permission permission) {
         if (null == permission) {// 参数空指针
-            return Result.error (ResultEnum.NULL_PARAM.getCode (), ResultEnum.NULL_PARAM.getMsg ());
+            return Result.error(ResultEnum.NULL_PARAM.getCode(), ResultEnum.NULL_PARAM.getMsg());
         }
-        String id = permission.getId ();
-        if (null == id || "".equals (id)) {
-            return Result.error (ResultEnum.NULL_PARAM.getCode (),
+        String id = permission.getId();
+        if (null == id || "".equals(id)) {
+            return Result.error(ResultEnum.NULL_PARAM.getCode(),
                     "Required String parameter 'id' is not present");
         }
-        Permission originalData = permissionService.getById (id);
+        Permission originalData = permissionService.getById(id);
         if (null == originalData) {// 未找到
-            return Result.error (ResultEnum.NOT_FOUND.getCode (), ResultEnum.NOT_FOUND.getMsg ());
+            return Result.error(ResultEnum.NOT_FOUND.getCode(), ResultEnum.NOT_FOUND.getMsg());
         }
-        if (originalData.getIsDelete () == 1) {// 数据被删除
-            return Result.error (ResultEnum.DATA_DELETE.getCode (), ResultEnum.DATA_DELETE.getMsg ());
+        if (originalData.getIsDelete() == 1) {// 数据被删除
+            return Result.error(ResultEnum.DATA_DELETE.getCode(), ResultEnum.DATA_DELETE.getMsg());
         }
-        permission.setUpdater (TokenUtil.getTokenUserId ());// 修改人
-        permission.setUpdateTime (DateUtils.getCurrentTime ());// 修改时间
-        return Result.success (permissionService.updateById (permission));
+        permission.setUpdater(TokenUtil.getTokenUserId());// 修改人
+        permission.setUpdateTime(DateUtils.getCurrentTime());// 修改时间
+        return Result.success(permissionService.updateById(permission));
     }
 
     @ApiOperation("删除权限")
@@ -238,15 +245,15 @@ public class RBACController {
     @ApiImplicitParam(name = "id", value = "角色id", dataType = "string", required = true, paramType = "query")
     @UserLoginToken
     public Result removePermission(@RequestParam String id) {
-        Permission permission = permissionService.getById (id);
+        Permission permission = permissionService.getById(id);
         if (null == permission) {// 未找到
-            return Result.error (ResultEnum.NOT_FOUND.getCode (), ResultEnum.NOT_FOUND.getMsg ());
+            return Result.error(ResultEnum.NOT_FOUND.getCode(), ResultEnum.NOT_FOUND.getMsg());
         }
-        if (permission.getIsDelete () == 1) {// 数据已被删除
-            return Result.error (ResultEnum.DATA_DELETE.getCode (), ResultEnum.DATA_DELETE.getMsg ());
+        if (permission.getIsDelete() == 1) {// 数据已被删除
+            return Result.error(ResultEnum.DATA_DELETE.getCode(), ResultEnum.DATA_DELETE.getMsg());
         }
-        permission.setIsDelete (1);// 逻辑删除
-        return Result.success (permissionService.updateById (permission));
+        permission.setIsDelete(1);// 逻辑删除
+        return Result.success(permissionService.updateById(permission));
     }
 
     @ApiOperation("条件查询权限列表")
@@ -257,9 +264,9 @@ public class RBACController {
             @ApiImplicitParam(name = "pageSize", value = "每页数量", dataType = "int", paramType = "query", defaultValue = "10")
     })
     public Result listPermissionsPage(@RequestParam Integer pageNum,
-                                      @RequestParam Integer pageSize,
-                                      @RequestBody Permission permission) {
-        return permissionService.listByCondition (pageNum, pageSize, permission);
+            @RequestParam Integer pageSize,
+            @RequestBody Permission permission) {
+        return permissionService.listByCondition(pageNum, pageSize, permission);
     }
 }
 
